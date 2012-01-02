@@ -73,11 +73,11 @@ def get_meta(bodyfile):
 # Args: sorted directory listing contain unsorted dictionary 
 # of files & meta data
 # Returns: none
-# Displays the distribution of uid/gid for files on a per 
-# directory basis. This has proven useful in cases where an
-# attacker has installed new files, but neglected to change
-# the uid/gid values to reflect the "normal" values for the
-# given directory.
+# Displays the distribution and probability of uid/gid for 
+# files on a per directory basis. This has proven useful in 
+# cases where an attacker has installed new files, but 
+# neglected to change the uid/gid values to reflect the 
+# "normal" values for the given directory.
 def print_ugid_freq_by_dir(items, id_type):
     for path_name, file_name in items:
         freq = {}
@@ -88,16 +88,18 @@ def print_ugid_freq_by_dir(items, id_type):
             freq[ugid] = freq.get(ugid, 0) + 1
         
         # swap uid and cnt without clobbering uniques
-        uid_cnt = [(cnt, uid) for uid, cnt in freq.items()]
-        uid_cnt.sort()
-        if len(uid_cnt) > 1:
+        ugid_cnt = [(cnt, ugid) for ugid, cnt in freq.items()]
+        ugid_cnt.sort()
+        if len(ugid_cnt) > 1:
             print "\nPath: ",  path_name
-            linesep = "=========================="
-            for i in range(len(path_name) - 19):
-                linesep += "="
+            linesep = "--------------------------"
+            print "Count\t%s\t%%" % id_type
             print linesep
-            for cnt, uid in uid_cnt:
-                print "Count: %7d  %s: %5d" % (cnt, id_type, uid)
+            ttl_files = float(len(files))
+            probability = {}
+            for cnt, ugid in ugid_cnt:
+                probability[ugid] = cnt / ttl_files
+                print "%6d\t%5d\t%.2f%%" % (cnt, ugid, probability[ugid] * 100.0)
     return
 
 # Args: dictionary
