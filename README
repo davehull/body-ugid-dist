@@ -1,0 +1,5 @@
+If you're interested in using this script, you should also check out
+body-meta-dist, which can take other metadata elements beyond uid and
+gid, permissions (i.e. mode), can be interesting and useful.
+
+https://github.com/davehull/body-meta-dist
